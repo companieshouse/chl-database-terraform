@@ -44,7 +44,10 @@ resource "aws_iam_role_policy" "s3_read" {
           "s3:PutObject"
         ],
         "Effect": "Allow",
-        "Resource": "arn:aws:s3:::${var.aws_profile}-chl-db-dump.ch.gov.uk"
+        "Resource": [
+          "arn:aws:s3:::${var.aws_profile}-chl-db-dump.ch.gov.uk",
+          "arn:aws:s3:::${var.aws_profile}-chl-db-dump.ch.gov.uk/*"
+        ]
       }
     ]
   }
