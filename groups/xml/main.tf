@@ -20,34 +20,64 @@ provider "vault" {
 }
 
 # ------------------------------------------------------------------------------
-# Modules
-# ------------------------------------------------------------------------------
-module "rds" {
-  source = "./module-rds"
-  admin_cidrs               = local.admin_cidrs
-  allocated_storage         = var.allocated_storage
-  aws_profile               = var.aws_profile
-  backup_retention_period   = var.backup_retention_period
-  database_username         = data.vault_generic_secret.secrets.data["database-username"]
-  database_password         = data.vault_generic_secret.secrets.data["database-password"]
-  instance_class            = var.instance_class
-  maximum_storage           = var.maximum_storage
-  multi_az                  = var.multi_az
-  r53_zone_id               = var.r53_zone_id
-  r53_zone_name             = var.r53_zone_name
-  r53_create                = var.r53_create
-  rds_subnet_ids            = local.rds_subnet_ids
-  service                   = var.service
-  vpc_id                    = local.vpc_id
-}
-
-# ------------------------------------------------------------------------------
 # Locals
 # ------------------------------------------------------------------------------
 locals {
   admin_cidrs                     = concat(values(data.terraform_remote_state.networks.outputs.vpn_cidrs), values(data.terraform_remote_state.networks.outputs.internal_cidrs))
   rds_subnet_ids                  = split(",", data.terraform_remote_state.test_and_develop_vpc.outputs.rds_ids)
   vpc_id                          = data.terraform_remote_state.test_and_develop_vpc.outputs.vpc_id
+}
+
+# ------------------------------------------------------------------------------
+# Modules
+# ------------------------------------------------------------------------------
+module "db" {
+  source  = "terraform-aws-modules/rds/aws"
+  version = "~> 2.0"
+
+  create_db_parameter_group = "false"
+  create_db_subnet_group = "true"
+
+  identifier        = var.service
+  engine            = "oracle-se2"
+  engine_version    = "12.1.0.2.v21"
+  instance_class    = var.instance_class
+  allocated_storage = var.allocated_storage
+  multi_az          = var.multi_az
+
+  name     = upper(var.service)
+  username = data.vault_generic_secret.secrets.data["database-username"]
+  password = data.vault_generic_secret.secrets.data["database-password"]
+  port     = "1522"
+
+  deletion_protection     = true
+  maintenance_window      = "Mon:00:00-Mon:03:00"
+  backup_window           = "03:00-06:00"
+  backup_retention_period = "14"
+  skip_final_snapshot     = "false"
+
+  vpc_security_group_ids = ["sg-0893f79a82a63b3ce"]
+
+  # DB subnet group
+  subnet_ids = local.rds_subnet_ids
+
+  # DB option group
+  option_group_name = "oracle-se2-12-1-s3-integration"
+  major_engine_version = "12.1"
+  option_group_description = "Allows Integration with s3"
+
+  options = [
+      {
+        option_name = "S3_INTEGRATION"
+        version = "1.0"
+      },
+    ]
+
+  tags = {
+    Name        = var.service
+    Service     = var.service
+    Terraform   = "true"
+  }
 }
 
 # ------------------------------------------------------------------------------
@@ -73,23 +103,4 @@ data "terraform_remote_state" "test_and_develop_vpc" {
 
 data "vault_generic_secret" "secrets" {
   path = "applications/${var.aws_profile}/${var.environment}/${var.service}/configuration"
-}
-
-# ------------------------------------------------------------------------------
-# Outputs
-# ------------------------------------------------------------------------------
-output "rds_endpoint" {
-  value = module.rds.rds_endpoint
-}
-
-output "rds_database_name" {
-  value = module.rds.rds_database
-}
-
-output "db_user" {
-  value = module.rds.db_user
-}
-
-output "db_password" {
-  value = module.rds.db_password
 }
