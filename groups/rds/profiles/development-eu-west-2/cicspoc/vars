@@ -1,0 +1,15 @@
+aws_profile = "development-eu-west-2"
+aws_region  = "eu-west-2"
+aws_account = "development"
+
+
+r53_create    = true
+r53_zone_name = "aws.chdev.org"
+
+service = "cicspoc"
+environment = "poc"
+
+allocated_storage = 10
+maximum_storage   = 800
+
+network_state_bucket_name = "ch-development-terraform-state-london"

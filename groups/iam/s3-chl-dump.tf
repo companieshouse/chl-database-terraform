@@ -1,11 +1,3 @@
-# ------------------------------------------------------------------------------
-# Role Association
-# ------------------------------------------------------------------------------
-resource "aws_db_instance_role_association" "s3_read" {
-  db_instance_identifier = module.db.this_db_instance_arn
-  feature_name           = "S3_INTEGRATION"
-  role_arn               = aws_iam_role.rds_role.arn
-}
 
 # ------------------------------------------------------------------------------
 # Role

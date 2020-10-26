@@ -31,6 +31,14 @@ locals {
 # ------------------------------------------------------------------------------
 # Modules
 # ------------------------------------------------------------------------------
+module "security-group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "3.16.0"
+
+  name   = "${var.service}-rds-security-group"
+  vpc_id = local.vpc_id
+}
+
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> 2.0"
@@ -41,6 +49,7 @@ module "db" {
   identifier        = var.service
   engine            = "oracle-se2"
   engine_version    = "12.1.0.2.v21"
+  license_model     = "license-included"
   instance_class    = var.instance_class
   allocated_storage = var.allocated_storage
   multi_az          = var.multi_az
@@ -56,7 +65,7 @@ module "db" {
   backup_retention_period = "14"
   skip_final_snapshot     = "false"
 
-  vpc_security_group_ids = ["sg-0893f79a82a63b3ce"]
+  vpc_security_group_ids = [module.security-group.this_security_group_id]
 
   # DB subnet group
   subnet_ids = local.rds_subnet_ids
@@ -78,6 +87,19 @@ module "db" {
     Service     = var.service
     Terraform   = "true"
   }
+}
+
+# ------------------------------------------------------------------------------
+# Role Association
+# ------------------------------------------------------------------------------
+data "aws_iam_role" "chl-db-dump-read-s3-role" {
+  name = "chl-db-dump-read-s3-role"
+}
+
+resource "aws_db_instance_role_association" "s3_read" {
+  db_instance_identifier = module.db.this_db_instance_arn
+  feature_name           = "S3_INTEGRATION"
+  role_arn               = data.aws_iam_role.chl-db-dump-read-s3-role.arn
 }
 
 # ------------------------------------------------------------------------------
