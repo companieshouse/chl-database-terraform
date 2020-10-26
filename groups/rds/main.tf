@@ -90,19 +90,6 @@ module "db" {
 }
 
 # ------------------------------------------------------------------------------
-# Role Association
-# ------------------------------------------------------------------------------
-data "aws_iam_role" "chl-db-dump-read-s3-role" {
-  name = "chl-db-dump-read-s3-role"
-}
-
-resource "aws_db_instance_role_association" "s3_read" {
-  db_instance_identifier = module.db.this_db_instance_arn
-  feature_name           = "S3_INTEGRATION"
-  role_arn               = data.aws_iam_role.chl-db-dump-read-s3-role.arn
-}
-
-# ------------------------------------------------------------------------------
 # Remote State
 # ------------------------------------------------------------------------------
 data "terraform_remote_state" "networks" {
