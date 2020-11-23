@@ -1,12 +1,7 @@
 
-
-####### UNCONFIRMED, LOCATION MAY CHANGE ########
-
-aws_profile = "staging-eu-west-2"
+aws_profile = "heritage-staging-eu-west-2"
 aws_region  = "eu-west-2"
-aws_account = "staging"
-
-r53_create    = false
+aws_account = "heritage-staging"
 
 service     = "xmlpp"
 environment = "staging"
@@ -16,5 +11,3 @@ backup_retention_period = 14
 
 allocated_storage = 500
 maximum_storage   = 1000
-
-network_state_bucket_name = "ch-service-staging-terraform-state"

@@ -36,26 +36,6 @@ variable "environment" {
 }
 
 # ------------------------------------------------------------------------------
-# Route53 Variables
-# ------------------------------------------------------------------------------
-variable "r53_create" {
-  type        = bool
-  description = "Whether to create a Route53 record"
-}
-
-variable "r53_zone_id" {
-  type        = string
-  description = "The ZoneID of the Route53 record"
-  default     = ""
-}
-
-variable "r53_zone_name" {
-  type        = string
-  description = "The Zone name of the Route53 record"
-  default     = ""
-}
-
-# ------------------------------------------------------------------------------
 # RDS Variables
 # ------------------------------------------------------------------------------
 variable "instance_class" {
@@ -86,6 +66,11 @@ variable "maximum_storage" {
   description = "The maximum storage in GB to allow RDS to scale to"
 }
 
+variable "auto_stop" {
+  type = bool
+  default = false
+  description = "Whether to stop the RDS out of office hours"
+}
 # ------------------------------------------------------------------------------
 # Vault Variables
 # ------------------------------------------------------------------------------
