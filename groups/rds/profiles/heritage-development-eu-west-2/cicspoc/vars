@@ -3,7 +3,7 @@ aws_region  = "eu-west-2"
 aws_account = "heritage-development"
 
 service = "cicspoc"
-environment = "poc"
+environment = "cics"
 
 allocated_storage = 10
 maximum_storage   = 800

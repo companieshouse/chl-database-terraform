@@ -7,9 +7,9 @@ module "security_group" {
 
   name        = "${var.service}-rds-security-group"
   description = "Security group for the ${var.service} database"
-  vpc_id      = local.vpc_id
+  vpc_id      = data.aws_vpc.selected.id
 
-  ingress_cidr_blocks = [local.admin_cidrs]
+  ingress_cidr_blocks = local.admin_cidrs
   ingress_rules       = ["oracle-db-tcp"]
   egress_rules        = ["all-all"]
 }
@@ -37,13 +37,13 @@ module "db" {
   deletion_protection     = true
   maintenance_window      = "Mon:00:00-Mon:03:00"
   backup_window           = "03:00-06:00"
-  backup_retention_period = var.backend_retention_period
+  backup_retention_period = var.backup_retention_period
   skip_final_snapshot     = "false"
 
   vpc_security_group_ids = [module.security_group.this_security_group_id]
 
   # DB subnet group
-  subnet_ids = local.rds_subnet_ids
+  subnet_ids = data.aws_subnet_ids.data.ids
 
   # DB option group
   option_group_name = "oracle-se2-12-1-s3-integration"

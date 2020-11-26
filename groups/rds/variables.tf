@@ -16,11 +16,6 @@ variable "aws_account" {
  description = "The name of the AWS Account in which resources will be administered"
 }
 
-variable "network_state_bucket_name" {
-  type        = string
-  description = "The name of the S3 bucket containing the application network remote state"
-}
-
 # ------------------------------------------------------------------------------
 # Environment Variables
 # ------------------------------------------------------------------------------

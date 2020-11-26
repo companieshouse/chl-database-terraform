@@ -3,7 +3,7 @@ output "rds_endpoint" {
 }
 
 output "rds_address" {
-  value = aws_route53_record.rds[0].fqdn
+  value = aws_route53_record.rds.fqdn
 }
 
 output "rds_database_name" {
