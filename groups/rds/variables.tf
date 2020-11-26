@@ -48,7 +48,6 @@ variable "multi_az" {
 variable "backup_retention_period" {
   type = number
   description = "The number of days to retain backups for - 0 to 35"
-  default = "0"
 }
 
 variable "allocated_storage" {

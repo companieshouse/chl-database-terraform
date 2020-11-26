@@ -3,8 +3,8 @@ aws_profile = "heritage-staging-eu-west-2"
 aws_region  = "eu-west-2"
 aws_account = "heritage-staging"
 
-service     = "xmlpp"
-environment = "xml"
+service     = "ewfpp"
+environment = "ewf"
 
 multi_az = true
 backup_retention_period = 7

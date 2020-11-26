@@ -3,11 +3,11 @@ aws_profile = "heritage-staging-eu-west-2"
 aws_region  = "eu-west-2"
 aws_account = "heritage-staging"
 
-service     = "xmlpp"
-environment = "xml"
+service     = "ceu"
+environment = "ceu"
 
 multi_az = true
-backup_retention_period = 7
+backup_retention_period = 14
 
 allocated_storage = 500
 maximum_storage   = 1000

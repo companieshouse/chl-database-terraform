@@ -2,8 +2,10 @@ aws_profile = "heritage-development-eu-west-2"
 aws_region  = "eu-west-2"
 aws_account = "heritage-development"
 
-service = "cicspoc"
-environment = "cics"
+service = "ewfdev"
+environment = "ewf"
 
 allocated_storage = 10
 maximum_storage   = 800
+
+backup_retention_period = 2

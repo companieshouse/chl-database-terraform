@@ -2,8 +2,10 @@ aws_profile = "heritage-development-eu-west-2"
 aws_region  = "eu-west-2"
 aws_account = "heritage-development"
 
-service = "chprdpoc"
-environment = "poc"
+service = "ceudev"
+environment = "ceu" ### TODO what should these environments be ??
 
 allocated_storage = 50
 maximum_storage   = 800
+
+backup_retention_period = 2
