@@ -60,11 +60,6 @@ variable "maximum_storage" {
   description = "The maximum storage in GB to allow RDS to scale to"
 }
 
-variable "auto_stop" {
-  type = bool
-  default = false
-  description = "Whether to stop the RDS out of office hours"
-}
 # ------------------------------------------------------------------------------
 # Vault Variables
 # ------------------------------------------------------------------------------

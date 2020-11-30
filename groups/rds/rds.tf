@@ -28,10 +28,11 @@ module "db" {
   instance_class    = var.instance_class
   allocated_storage = var.allocated_storage
   multi_az          = var.multi_az
+  storage_encrypted = true
 
   name     = upper(var.service)
-  username = data.vault_generic_secret.secrets.data["database-username"]
-  password = data.vault_generic_secret.secrets.data["database-password"]
+  username = "testch"
+  password = "testch"
   port     = "1521"
 
   deletion_protection     = true
@@ -46,21 +47,20 @@ module "db" {
   subnet_ids = data.aws_subnet_ids.data.ids
 
   # DB option group
-  option_group_name = "oracle-se2-12-1-s3-integration"
+  # option_group_name = "oracle-se2-12-1-s3-integration"
   major_engine_version = "12.1"
-  option_group_description = "Allows Integration with s3"
-
-  options = [
-      {
-        option_name = "S3_INTEGRATION"
-        version = "1.0"
-      },
-    ]
+  # option_group_description = "Allows Integration with s3"
+  #
+  # options = [
+  #     {
+  #       option_name = "S3_INTEGRATION"
+  #       version = "1.0"
+  #     },
+  #   ]
 
   tags = {
     Name        = var.service
     Service     = var.service
     Terraform   = "true"
-    AutoStop    = var.auto_stop
   }
 }
