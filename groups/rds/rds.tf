@@ -23,6 +23,7 @@ module "db" {
 
   identifier        = var.service
   engine            = "oracle-se2"
+  major_engine_version = "12.1"
   engine_version    = "12.1.0.2.v21"
   license_model     = "license-included"
   instance_class    = var.instance_class
@@ -45,18 +46,6 @@ module "db" {
 
   # DB subnet group
   subnet_ids = data.aws_subnet_ids.data.ids
-
-  # DB option group
-  # option_group_name = "oracle-se2-12-1-s3-integration"
-  major_engine_version = "12.1"
-  # option_group_description = "Allows Integration with s3"
-  #
-  # options = [
-  #     {
-  #       option_name = "S3_INTEGRATION"
-  #       version = "1.0"
-  #     },
-  #   ]
 
   tags = {
     Name        = var.service
