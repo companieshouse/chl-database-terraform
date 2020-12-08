@@ -1,0 +1,13 @@
+
+aws_profile = "heritage-staging-eu-west-2"
+aws_region  = "eu-west-2"
+aws_account = "heritage-staging"
+
+service     = "ewf"
+environment = "ewf"
+
+multi_az = true
+backup_retention_period = 14
+
+allocated_storage = 500
+maximum_storage   = 1000
